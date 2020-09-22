@@ -1,0 +1,12 @@
+.have-account{
+    color: green;
+    text-align: center;
+    cursor: pointer;
+}
+.have-account:hover{
+    
+    text-decoration: underline;
+}
+form {
+    transition: all 0.5s;
+}
