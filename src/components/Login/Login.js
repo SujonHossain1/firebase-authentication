@@ -4,8 +4,10 @@ import {
     signInWithGithub,
     signInWithGoogle,
     signUpWithEmailAndPassword,
-    signInWithEmailAndPasswordOwn
+    signInWithEmailAndPasswordOwn,
+    signInWithFacebook
 } from '../FirebaseManager/FirebaseManager';
+import { useHistory, useLocation } from 'react-router-dom';
 import './Login.css';
 import { UserContext } from '../../App';
 
@@ -18,6 +20,11 @@ const Login = () => {
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
     const [newUser, setNewUser] = useState(false);
 
+    const history = useHistory();
+    const location = useLocation();
+
+    let { from } = location.state || { from: { pathname: "/" } };
+
     initializeAppFirebase();
 
     // SignIn With Github
@@ -25,6 +32,7 @@ const Login = () => {
         signInWithGithub()
             .then(res => {
                 setLoggedInUser(res);
+                history.replace(from);
             })
             .catch(err => {
                 setLoggedInUser(err);
@@ -35,6 +43,7 @@ const Login = () => {
         signInWithGoogle()
             .then(res => {
                 setLoggedInUser(res);
+                history.replace(from);
             })
             .catch(err => {
                 setLoggedInUser(err);
@@ -42,7 +51,14 @@ const Login = () => {
     }
     // SignIn With Facebook
     const signInFacebook = () => {
-        console.log("SignIn With Facebook");
+        signInWithFacebook()
+            .then(res => {
+                setLoggedInUser(res);
+                history.replace(from);
+            })
+            .catch(err => {
+                setLoggedInUser(err);
+            })
     }
 
     const handleInputField = (event) => {
@@ -87,13 +103,8 @@ const Login = () => {
             signInWithEmailAndPasswordOwn(email, password)
                 .then(res => {
                     setLoggedInUser(res);
-                    setUser((prevData) => {
-                        return {
-                            ...prevData,
-                            email: '',
-                            password: "",
-                        }
-                    })
+                    history.replace(from);
+                    
                 })
                 .catch(err => {
                     setLoggedInUser(err);

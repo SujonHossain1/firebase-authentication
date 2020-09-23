@@ -21,11 +21,24 @@ export const signInWithGithub = () => {
         });
 }
 
-// SignIn With Facebook
+// SignIn With Google
 export const signInWithGoogle = () => {
     const googleProvider = new firebase.auth.GoogleAuthProvider();
 
     return firebase.auth().signInWithPopup(googleProvider)
+        .then(res => {
+            return successfulResponse(res);
+        })
+        .catch(error => {
+            return errorResponse(error);
+        });
+}
+
+// SignIn With Facebook 
+
+export const signInWithFacebook = () => {
+    const facebookProvider = new firebase.auth.FacebookAuthProvider();
+    return firebase.auth().signInWithPopup(facebookProvider)
         .then(res => {
             return successfulResponse(res);
         })
